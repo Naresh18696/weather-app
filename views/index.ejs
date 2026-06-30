@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Weather Assistant</title>
+
+    <link rel="shortcut icon" href="/images/weather.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+    <div class="background"></div>
+
+    <!-- ================= HEADER ================= -->
+
+    <header>
+
+        <div class="logo">
+
+            <i class="fa-solid fa-cloud-sun"></i>
+
+            <h2>AI Weather</h2>
+
+        </div>
+
+        <nav>
+
+            <button id="darkMode">
+
+                <i class="fa-solid fa-moon"></i>
+
+            </button>
+
+        </nav>
+
+    </header>
+
+    <!-- ================= SEARCH ================= -->
+
+    <section class="search-container">
+
+        <h1>
+
+            AI Weather Assistant
+
+        </h1>
+
+        <p>
+
+            Search any city and get AI powered weather advice.
+
+        </p>
+
+        <form action="/getWeather" method="POST" class="search-box">
+
+            <input type="text" name="city" placeholder="Enter City Name" required autocomplete="on">
+
+            <button>
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                Search
+
+            </button>
+
+        </form>
+    <div>
+        <% if (locals.error) { %>
+            <p class="error-text-only">
+                <%= error %>
+            </p>
+            <% } %>
+    </div>
+
+    </section>
+
+    <!-- ================= LOADER ================= -->
+
+    <div class="loader hidden">
+
+        <div class="spinner"></div>
+
+        <p>Loading Weather...</p>
+
+    </div>
+
+    <!-- ================= WEATHER ================= -->
+
+    <main>
+
+        <div class="weather-card glass">
+
+            <div class="top">
+
+                <div>
+
+                    <h2>
+                        <%= locals.weather ? weather.location.name : 'Search a City' %>
+
+                    </h2>
+
+                    <p>
+
+                        <%= locals.weather?.location.region || "-" %> 
+                        <%= "| "+locals.weather?.location.country || "-" %>
+                        | <span class="date"><%= locals.dateT?dateT:"-" %></span>
+                    </p>
+
+                </div>
+
+                <img src="https:<%= locals.weather?.current.condition.icon || '/images/cloud.png' %>" class="weather-icon">
+
+            </div>
+
+            <div class="temperature">
+
+                <%= locals.weather?.current.temp_c || "--" %>
+
+                    <span>
+
+                        °C
+
+                    </span>
+
+            </div>
+
+            <div class="condition">
+
+                <%= locals.weather?.current.condition.text || "Weather Condition" %>
+
+            </div>
+
+            <div class="stats">
+
+                <div class="stat">
+
+                    <i class="fa-solid fa-droplet"></i>
+
+                    <h4>Humidity</h4>
+
+                    <p>
+
+                        <%= locals.weather?.current.humidity || "--" %>%
+
+                    </p>
+
+                </div>
+
+                <div class="stat">
+
+                    <i class="fa-solid fa-wind"></i>
+
+                    <h4>Wind</h4>
+
+                    <p>
+
+                        <%= locals.weather?.current.wind_kph || "--" %>
+
+                            km/h
+
+                    </p>
+
+                </div>
+
+                <div class="stat">
+
+                    <i class="fa-solid fa-cloud-rain"></i>
+
+                    <h4>Rain</h4>
+
+                    <p>
+
+                        <%= locals.weather?.current.chance_of_rain || "--" %>%
+
+                    </p>
+
+                </div>
+
+                <div class="stat">
+
+                    <i class="fa-solid fa-sun"></i>
+
+                    <h4>UV Index</h4>
+
+                    <p>
+
+                        <%= locals.weather?.current.uv ?? "--" %>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= SUNRISE ================= -->
+
+        <section class="sun-card glass">
+
+            <div>
+
+                <h3>
+
+                    🌅 Sunrise
+
+                </h3>
+
+                <p>
+
+                    <%= locals.weather?.forecast.forecastday[0].astro.sunrise || "--:--" %>
+
+                </p>
+
+            </div>
+
+            <div>
+
+                <h3>
+
+                    🌇 Sunset
+
+                </h3>
+
+                <p>
+
+                    <%= locals.weather?.forecast.forecastday[0].astro.sunset || "--:--" %>
+
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- ================= AI WEATHER ================= -->
+
+        <section class="ai-card glass">
+
+            <h2>
+
+                🤖 AI Weather Advice
+
+            </h2>
+
+            <div class="ai-grid">
+
+                <div class="tip">
+
+                    👕
+
+                    <h4>Clothing</h4>
+
+                    <p>
+
+                        <%= locals.advice?.clothing || "Waiting..." %>
+
+                    </p>
+
+                </div>
+
+                <div class="tip">
+
+                    ☂
+
+                    <h4>Umbrella</h4>
+
+                    <p>
+
+                        <%= locals.advice?.umbrella || "Waiting..." %>
+
+                    </p>
+
+                </div>
+
+                <div class="tip">
+
+                    💧
+
+                    <h4>Water Intake</h4>
+
+                    <p>
+
+                        <%= locals.advice?.water || "Waiting..." %>
+
+                    </p>
+
+                </div>
+
+                <div class="tip">
+
+                    🌞
+
+                    <h4>UV Advice</h4>
+
+                    <p>
+
+                        <%= locals.advice?.uv || "Waiting..." %>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+    <script src="/js/script.js"></script>
+</body>
+
+</html>
