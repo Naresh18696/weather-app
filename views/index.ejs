@@ -114,14 +114,14 @@
 
                     <p>
 
-                        <%= locals.weather?.location.region || "-" %> 
-                        <%= "| "+locals.weather?.location.country || "-" %>
+                        <%= locals.weather?.location.region || "-" %> |
+                        <%= locals.weather?.location.country || "-" %>
                         | <span class="date"><%= locals.dateT?dateT:"-" %></span>
                     </p>
 
                 </div>
 
-                <img src="https:<%= locals.weather?.current.condition.icon || '/images/cloud.png' %>" class="weather-icon">
+                <img src="<% if(locals.weather){ %>https:<%=  weather.current.condition.icon %> <% }else{  %>images/cloud.png <% } %>" class="weather-icon">
 
             </div>
 

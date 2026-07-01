@@ -6,9 +6,9 @@ const app = express();
 const port = 3000;
 const API_URL = "http://api.weatherapi.com/v1";
 const apiKey = "0ced416e7ef64c6e9a165428263006";
-let weatherData;
-let advice;
-let nowDate;
+// let weatherData;
+// let advice;
+// let nowDate;
 // App view engine setup for each and every time we didn't given .ejs  *extension
 app.set("view engine","ejs");
 app.use(express.static("public"));
@@ -72,9 +72,11 @@ const formatted = date.toLocaleString("en-GB", {
 return formatted;
 }
 app.get("/", (req, res) => {
-  res.render("index.ejs", { weather: weatherData, advice: advice });
+  res.render("index.ejs");
 });
-
+app.get("/getWeather", (req, res) => {
+    res.redirect("/");
+});
 app.post("/getWeather",async(req,res)=>{
     // console.log(req.body.city);
     const city = req.body.city;
@@ -82,10 +84,10 @@ app.post("/getWeather",async(req,res)=>{
             // const result =await axios.get(`${API_URL}/current.json?key=${apiKey}&q=${city}`);
             const result =await axios.get(`${API_URL}/forecast.json?key=${apiKey}&q=${city}`);
             // console.log(result.data);
-            weatherData = result.data;
+          const  weatherData = result.data;
             // console.log(weatherData.current.temp_c);
-            advice = getAdvice(weatherData);
-            nowDate = getDate(weatherData.location.localtime);
+          const  advice = getAdvice(weatherData);
+          const  nowDate = getDate(weatherData.location.localtime);
             // console.log(nowDate);
             res.render("index",{ weather: weatherData, advice: advice,dateT:nowDate});
     } catch (error) {
@@ -99,8 +101,7 @@ app.post("/getWeather",async(req,res)=>{
             // });
     }
 
-
-})
+});
 app.listen(port, () => {
   console.log(`Running port is ${port}`);
 });
